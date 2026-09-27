@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmap Project Backend</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg:#0A0E13;
+    --bg-soft:#0F1620;
+    --panel:#131B26;
+    --panel-2:#0D141D;
+    --line:#1E2A38;
+    --text:#E7EDF3;
+    --muted:#7E90A3;
+    --muted-2:#54677C;
+    --accent:#39D8C7;
+
+    --l1:#3DDC84; --l1-dim:rgba(61,220,132,.13);
+    --l2:#F2C744; --l2-dim:rgba(242,199,68,.13);
+    --l3:#F2934C; --l3-dim:rgba(242,147,76,.13);
+    --l4:#F2555A; --l4-dim:rgba(242,85,90,.13);
+    --l5:#E8437B; --l5-dim:rgba(232,67,123,.14);
+    --l6:#D9B24C; --l6-dim:rgba(217,178,76,.14);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(57,216,199,.08), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;}
+  a{color:inherit;}
+
+  header{
+    padding:56px 24px 32px;
+    max-width:920px;
+    margin:0 auto;
+    border-bottom:1px solid var(--line);
+  }
+  .kicker{
+    font-size:13px;
+    color:var(--accent);
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:14px;
+  }
+  .kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;}
+  header h1{
+    font-size:clamp(28px,5vw,42px);
+    font-weight:700;
+    margin:0 0 12px;
+    letter-spacing:-0.01em;
+    max-width:16ch;
+  }
+  header p{
+    color:var(--muted);
+    font-size:16px;
+    max-width:56ch;
+    margin:0 0 28px;
+  }
+
+  .progress-shell{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+  .progress-num{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;line-height:1;min-width:70px;}
+  .progress-num span{font-size:16px;color:var(--muted);font-weight:500;}
+  .progress-bar-track{
+    flex:1;min-width:200px;height:8px;background:var(--panel-2);
+    border-radius:99px;overflow:hidden;border:1px solid var(--line);
+  }
+  .progress-bar-fill{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,var(--l1),var(--accent));
+    border-radius:99px;transition:width .4s ease;
+  }
+  .progress-caption{color:var(--muted-2);font-size:13px;white-space:nowrap;}
+  .reset-btn{
+    background:none;border:1px solid var(--line);color:var(--muted);
+    font-size:13px;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:inherit;
+  }
+  .reset-btn:hover{border-color:var(--muted-2);color:var(--text);}
+
+  nav.jump{
+    max-width:920px;margin:0 auto;padding:18px 24px;
+    display:flex;gap:8px;overflow-x:auto;
+    position:sticky;top:0;
+    background:rgba(10,14,19,.92);
+    backdrop-filter:blur(6px);
+    z-index:10;
+    border-bottom:1px solid var(--line);
+  }
+  nav.jump::-webkit-scrollbar{display:none;}
+  nav.jump a{
+    flex:0 0 auto;font-size:13px;font-weight:600;color:var(--muted);
+    text-decoration:none;padding:7px 12px;border-radius:99px;
+    border:1px solid var(--line);white-space:nowrap;
+  }
+  nav.jump a .tick{color:var(--tier-color,var(--accent));font-weight:700;}
+
+  main{max-width:920px;margin:0 auto;padding:8px 24px 100px;position:relative;}
+
+  .level{
+    position:relative;padding:44px 0 44px 40px;
+    border-left:2px solid var(--tier-color);margin-left:10px;
+  }
+  .level:last-child{border-left-color:transparent;}
+  .level::before{
+    content:"";position:absolute;left:-8px;top:44px;
+    width:16px;height:16px;border-radius:50%;
+    background:var(--bg);border:3px solid var(--tier-color);
+  }
+
+  .level-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+  .level-tag{
+    font-size:12px;font-weight:700;letter-spacing:.02em;
+    color:var(--tier-color);background:var(--tier-dim);
+    padding:4px 10px;border-radius:6px;
+  }
+  .level-head h2{font-size:21px;margin:0;font-weight:700;}
+  .level-progress{margin-left:auto;font-size:13px;color:var(--muted-2);font-variant-numeric:tabular-nums;}
+
+  .level-bar{
+    height:5px;background:var(--panel-2);border-radius:99px;
+    overflow:hidden;margin:12px 0 22px;max-width:340px;
+  }
+  .level-bar-fill{height:100%;background:var(--tier-color);width:0%;transition:width .3s ease;}
+
+  .topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;}
+
+  .topic{
+    display:flex;align-items:flex-start;gap:10px;
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:10px;padding:11px 12px;cursor:pointer;user-select:none;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .topic:hover{border-color:var(--tier-color);}
+  .topic.done{background:var(--tier-dim);border-color:var(--tier-color);}
+  .topic input{display:none;}
+  .checkbox{
+    flex:0 0 auto;width:18px;height:18px;border-radius:5px;
+    border:1.5px solid var(--muted-2);margin-top:1px;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .topic.done .checkbox{background:var(--tier-color);border-color:var(--tier-color);}
+  .checkbox svg{width:11px;height:11px;opacity:0;transition:opacity .1s ease;}
+  .topic.done .checkbox svg{opacity:1;}
+
+  .topic-text{font-size:14px;}
+  .topic-num{color:var(--muted-2);font-size:12px;margin-right:6px;font-variant-numeric:tabular-nums;}
+  .topic.done .topic-text{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--muted-2);}
+
+  footer{max-width:920px;margin:0 auto;padding:0 24px 60px;color:var(--muted-2);font-size:13px;}
+
+  @media (max-width:600px){
+    header{padding:40px 18px 24px;}
+    main{padding:8px 18px 80px;}
+    nav.jump{padding:14px 18px;}
+    .level{padding-left:28px;margin-left:4px;}
+    .topics{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:420px){
+    .topics{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker"><span class="dot"></span>PETA LATIHAN &middot; PROJECT BACKEND</div>
+  <h1>Roadmap Project Backend</h1>
+  <p>40 project API, dari yang paling sederhana sampai backend skala besar. Centang setiap project yang sudah kamu selesaikan untuk melacak progres.</p>
+
+  <div class="progress-shell">
+    <div class="progress-num" id="overallNum">0<span>/40</span></div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="overallBar"></div></div>
+    <div class="progress-caption" id="overallPct">0% selesai</div>
+    <button class="reset-btn" id="resetBtn">Reset progres</button>
+  </div>
+</header>
+
+<nav class="jump" id="jumpNav"></nav>
+
+<main id="main"></main>
+
+<footer>Progres disimpan sementara selama halaman ini terbuka di browser kamu.</footer>
+
+<script>
+const DATA = [
+  { tag:"LEVEL 1 · 🟢", title:"Dasar", color:"var(--l1)", dim:"var(--l1-dim)", topics:[
+    "API Hello World","API Data Sederhana","API CRUD","API To-Do List","API Catatan"
+  ]},
+  { tag:"LEVEL 2 · 🟡", title:"Database", color:"var(--l2)", dim:"var(--l2-dim)", topics:[
+    "API Data Mahasiswa","API Data Produk","API Stok Barang","API Data Buku",
+    "API Perpustakaan","API Absensi","API Data Karyawan"
+  ]},
+  { tag:"LEVEL 3 · 🟠", title:"Authentication", color:"var(--l3)", dim:"var(--l3-dim)", topics:[
+    "API Register","API Login","API Logout","API User Profile",
+    "API Role User & Admin","API Permission"
+  ]},
+  { tag:"LEVEL 4 · 🔴", title:"Backend Menengah", color:"var(--l4)", dim:"var(--l4-dim)", topics:[
+    "API Sistem Pengaduan","API Pendaftaran Event","API Sistem KRS","API Sistem Peminjaman",
+    "API Sistem Penjualan","API Sistem Kas","API Manajemen Anggota"
+  ]},
+  { tag:"LEVEL 5 · 🔥", title:"Backend Lanjutan", color:"var(--l5)", dim:"var(--l5-dim)", topics:[
+    "API E-Commerce","API Sistem Akademik","API Booking","API Rental",
+    "API Manajemen Project","API Notifikasi","API Chat","API Payment","API Dashboard Admin"
+  ]},
+  { tag:"LEVEL 6 · 🏆", title:"Project Backend Besar", color:"var(--l6)", dim:"var(--l6-dim)", topics:[
+    "Backend Website Organisasi Kampus","Backend Sistem Informasi Akademik",
+    "Backend E-Commerce Full API","Backend Sistem Manajemen Kampus",
+    "Backend Platform Pembelajaran","Backend Social Media API"
+  ]}
+];
+
+let state = {};
+let counter = 0;
+DATA.forEach((lvl, li)=>{ lvl.topics.forEach((t, ti)=>{ state[li+"-"+ti] = false; counter++; }); });
+const TOTAL = counter;
+
+const main = document.getElementById('main');
+const jumpNav = document.getElementById('jumpNav');
+
+DATA.forEach((lvl, li)=>{
+  const id = "level-"+li;
+
+  const a = document.createElement('a');
+  a.href = "#"+id;
+  a.style.setProperty('--tier-color', lvl.color);
+  a.innerHTML = `<span class="tick" id="tick-${li}">0/${lvl.topics.length}</span> &nbsp;${lvl.title}`;
+  jumpNav.appendChild(a);
+
+  const section = document.createElement('section');
+  section.className = 'level';
+  section.id = id;
+  section.style.setProperty('--tier-color', lvl.color);
+  section.style.setProperty('--tier-dim', lvl.dim);
+
+  section.innerHTML = `
+    <div class="level-head">
+      <span class="level-tag">${lvl.tag}</span>
+      <h2>${lvl.title}</h2>
+      <span class="level-progress" id="lp-${li}">0/${lvl.topics.length}</span>
+    </div>
+    <div class="level-bar"><div class="level-bar-fill" id="lb-${li}"></div></div>
+    <div class="topics" id="topics-${li}"></div>
+  `;
+  main.appendChild(section);
+
+  const topicsEl = section.querySelector(`#topics-${li}`);
+  lvl.topics.forEach((t, ti)=>{
+    const key = li+"-"+ti;
+    const num = (DATA.slice(0,li).reduce((s,l)=>s+l.topics.length,0) + ti + 1);
+    const div = document.createElement('label');
+    div.className = 'topic';
+    div.dataset.key = key;
+    div.innerHTML = `
+      <span class="checkbox">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </span>
+      <span class="topic-text"><span class="topic-num">${num}</span>${t}</span>
+    `;
+    div.addEventListener('click', ()=>{
+      state[key] = !state[key];
+      div.classList.toggle('done', state[key]);
+      render();
+    });
+    topicsEl.appendChild(div);
+  });
+});
+
+function render(){
+  let done = 0;
+  DATA.forEach((lvl, li)=>{
+    let ldone = 0;
+    lvl.topics.forEach((t, ti)=>{ if(state[li+"-"+ti]) ldone++; });
+    done += ldone;
+    document.getElementById(`lp-${li}`).textContent = `${ldone}/${lvl.topics.length}`;
+    document.getElementById(`lb-${li}`).style.width = (ldone/lvl.topics.length*100)+"%";
+    document.getElementById(`tick-${li}`).textContent = `${ldone}/${lvl.topics.length}`;
+  });
+  document.getElementById('overallNum').innerHTML = `${done}<span>/${TOTAL}</span>`;
+  document.getElementById('overallBar').style.width = (done/TOTAL*100)+"%";
+  document.getElementById('overallPct').textContent = Math.round(done/TOTAL*100)+"% selesai";
+}
+
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  Object.keys(state).forEach(k=> state[k]=false);
+  document.querySelectorAll('.topic').forEach(el=> el.classList.remove('done'));
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
